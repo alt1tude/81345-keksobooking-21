@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Artem Prokopiev](https://up.htmlacademy.ru/javascript/21/user/81345).
-* Наставник: `Неизвестно`.
+* Наставник: [Артемий Бойко](https://htmlacademy.ru/profile/id607755).
 
 ---
 
