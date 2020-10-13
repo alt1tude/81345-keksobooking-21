@@ -3,136 +3,155 @@
 // Найдем карту и покажем ее, сделав активной
 // const map = document.querySelector('.map');
 // map.classList.remove('map--faded');
+const MOCKS = 8;
 
-const AUTHOR = ['Name1', 'Name2', 'Name3', 'Name4', 'Name5', 'Name6', 'Name7', 'Name8'];
-const AVATAR = ['img/avatars/user01.png', 'img/avatars/user02.png', 'img/avatars/user03.png', 'img/avatars/user04.png', 'img/avatars/user05.png', 'img/avatars/user06.png', 'img/avatars/user07.png', 'img/avatars/user08.png'];
-const TITLE = ['Apart1', 'Apart2', 'Apart3', 'Apart4', 'Apart5', 'Apart6', 'Apart7'];
-const ADDRESS = ['50, 130', '150, 200', '250, 300', '350, 400', '450, 500', '550, 600', '580, 630'];
-const PRICE = [10, 20, 30, 40, 50, 60, 70];
-const TYPE = ['palace', 'flat', 'house', 'bungalow'];
-const ROOM = [1, 2, 3, 4, 5];
-const GUESTS = [1, 2, 3, 4, 5, 6, 7];
-const CHECKIN = ['12:00', '13:00', '14:00'];
-const CHECKOUT = ['12:00', '13:00', '14:00'];
-const FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
-const DESCRIPTION = ['description1', 'description2', 'description3', 'description4', 'description5'];
-const PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
+const TITLES = [`Уютная квартира`, `Просторная квартира`, `Светлые апартаменты`, `Уютная гостинка`, `Шикарный лофт`];
+const ADDRESSES = [`ул. Ленина`, `ул. Ломоносова`, `ул. Пушкина`, `ул. Лермонтова`, `ул. Мира`];
+const TYPES = [`palace`, `flat`, `house`, `bungalow`];
+const CHECKIN = [`12:00`, `13:00`, `14:00`];
+const CHECKOUT = [`12:00`, `13:00`, `14:00`];
+const FEATURES = [`wifi`, `dishwasher`, `parking`, `washer`, `elevator`, `conditioner`];
+const DESCRIPTIONS = [`description1`, `description2`, `description3`, `description4`, `description5`];
+const PHOTOS = [`http://o0.github.io/assets/images/tokyo/hotel1.jpg`, `http://o0.github.io/assets/images/tokyo/hotel2.jpg`, `http://o0.github.io/assets/images/tokyo/hotel3.jpg`];
 const LOCATION = {
-  x: {min: 0, max: 1200},
+  x: {min: 50, max: 1200 - 50},
   y: {min: 130, max: 630}
 };
 
-// Получаем рандомное число от min до max
+// Функция получения рандомного число от min до max
 
-function randomInteger(from, to) {
+function getRandomInteger(from, to) {
   const min = Math.ceil(from);
   const max = Math.floor(to);
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-// Функция получения случайного э-та из массива
+// Функция получения рандомного э-та из массива
 
-function randomItem(array) {
+function getRandomItem(array) {
   const random = Math.floor(Math.random() * array.length);
   return array[random];
 }
 
 // Объявляем генерацию случайных полей
 
-function generateAuthor() {
-  return randomItem(AUTHOR);
+function generateAuthor(index) {
+  return `img/avatars/user0${index}.png`;
 }
 
-function generateAvatar() {
-  return randomItem(AVATAR);
+function generateTitles() {
+  return getRandomItem(TITLES);
 }
 
-function generateTitle() {
-  return randomItem(TITLE);
-}
-
-function generateAddress() {
-  return randomItem(ADDRESS);
+function generateAddresses() {
+  return `${getRandomItem(ADDRESSES)} ${getRandomInteger(1, 50)}`;
 }
 
 function generatePrice() {
-  return randomItem(PRICE);
+  return getRandomInteger(100, 3000);
 }
 
-function generateType() {
-  return randomItem(TYPE);
+function generateTypes() {
+  return getRandomItem(TYPES);
 }
 
-function generateRooms() {
-  return randomItem(ROOM);
+function generateRoom() {
+  return getRandomInteger(1, 5);
 }
 
-function generateGuests() {
-  return randomItem(GUESTS);
+function generateGuest() {
+  return getRandomInteger(1, 7);
 }
 
 function generateCheckin() {
-  return randomItem(CHECKIN);
+  return getRandomItem(CHECKIN);
 }
 
 function generateCheckout() {
-  return randomItem(CHECKOUT);
+  return getRandomItem(CHECKOUT);
 }
 
 function generateFeatures() {
-  return randomItem(FEATURES);
+  return getRandomItem(FEATURES);
 }
 
-function generateDescription() {
-  return randomItem(DESCRIPTION);
+function generateDescriptions() {
+  return getRandomItem(DESCRIPTIONS);
 }
 
 function generatePhotos() {
-  return randomItem(PHOTOS);
+  return getRandomItem(PHOTOS);
 }
 
 function generateCoordX() {
-  return randomInteger(LOCATION.x.min, LOCATION.x.max);
+  return getRandomInteger(LOCATION.x.min, LOCATION.x.max);
 }
 
 function generateCoordY() {
-  return randomInteger(LOCATION.y.min, LOCATION.y.max);
+  return getRandomInteger(LOCATION.y.min, LOCATION.y.max);
 }
 
-function generateObj() {
+function getPinData(i) {
   return {
-    author: generateAuthor(),
-    avatar: generateAvatar(),
-    title: generateTitle(),
-    address: generateAddress(),
-    price: generatePrice(),
-    type: generateType(),
-    rooms: generateRooms(),
-    guests: generateGuests(),
-    checkin: generateCheckin(),
-    checkout: generateCheckout(),
-    features: generateFeatures(),
-    description: generateDescription(),
-    photos: generatePhotos(),
-    x: generateCoordX(),
-    y: generateCoordY()
+    'author': {
+      'avatar': generateAuthor(i)
+    },
+    'offer': {
+      'title': generateTitles(),
+      'address': generateAddresses(),
+      'price': generatePrice(),
+      'type': generateTypes(),
+      'rooms': generateRoom(),
+      'guests': generateGuest(),
+      'checkin': generateCheckin(),
+      'checkout': generateCheckout(),
+      'features': generateFeatures(),
+      'description': generateDescriptions(),
+      'photos': generatePhotos()
+    },
+    'location': {
+      'x': generateCoordX(),
+      'y': generateCoordY()
+    }
   };
 }
 
 // Функция для создания массива из 8 сгенерированных JS объектов
 
-const MOCS = 8;
-
-function createObj() {
-  const annon = [];
-  for (let i = 1; i <= MOCS; i++) {
-    annon.push(generateObj());
+function createPinDatas() {
+  const arrayFields = [];
+  for (let i = 1; i <= MOCKS; i++) {
+    arrayFields.push(getPinData(i));
   }
-  return annon;
+  return arrayFields;
 }
 
-// Найдем шаблон
+// Блок map, удаляем временно класс для активации карты
+const map = document.querySelector(`.map`);
+map.classList.remove(`map--faded`);
+// function showMap() {}
 
-// const pin = document.querySelector('#pin');
+// Найдем блок(div) в которой будем копировать
+const mapPins = document.querySelector(`.map__pins`);
+// Найдем шаблон метки для копирования
+const pinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
+// Найдем шаблон окна с информацией для копирования
 
-// const pinTemplate = document.querySelector('.map__pin');
+// const templateCard = document.querySelector(`#card`).content.querySelector(`.map__card`);
+
+// Функция заполнения блока(div) клонированными DOM-элементами
+function addTemplatePins() {
+  const pinDatas = createPinDatas();
+  pinDatas.forEach(function (pinData) {
+    const pinElement = pinTemplate.cloneNode(true);
+    const avatarElement = pinElement.querySelector(`img`);
+    avatarElement.src = pinData.author.avatar;
+    avatarElement.alt = pinData.offer.title;
+    mapPins.appendChild(pinElement);
+    const width = parseInt(pinElement.offsetWidth, 10);
+    const height = parseInt(pinElement.offsetHeight, 10);
+    pinElement.style.left = `${pinData.location.x - width / 2}px`;
+    pinElement.style.top = `${pinData.location.y - height}px`;
+  });
+}
+addTemplatePins();
