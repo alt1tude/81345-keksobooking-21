@@ -136,7 +136,6 @@ const mapPins = document.querySelector(`.map__pins`);
 // Найдем шаблон метки для копирования
 const pinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
 
-
 // Функция заполнения блока(div) клонированными DOM-элементами
 function addTemplatePins() {
   const pinDatas = createPinDatas();
@@ -156,3 +155,17 @@ addTemplatePins();
 
 // Найдем шаблон окна с информацией для копирования
 const templateCard = document.querySelector(`#card`).content.querySelector(`.map__card`);
+
+// Секцию map нашли выше
+
+const cardsDatas = createPinDatas();
+
+function addTemplateCards() { }
+  const cardElement = templateCard.cloneNode(true);
+  const cardAvatar = cardElement.querySelector(`.popup__avatar`);
+
+
+
+  map.appendChild(cardElement);
+
+// addTemplateCards();
