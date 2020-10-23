@@ -153,19 +153,37 @@ function addTemplatePins() {
 }
 addTemplatePins();
 
+
 // Найдем шаблон окна с информацией для копирования
 const templateCard = document.querySelector(`#card`).content.querySelector(`.map__card`);
+// Секцию map нашли выше, в ней находим блок с формой-фильтром, для insertBefore
+const mapFiltersContainer = map.querySelector(`.map__filters-container`);
 
-// Секцию map нашли выше
+//эксперименты
 
-const cardsDatas = createPinDatas();
+function addTemplateCards() {
+  // Записываем в переменную клонированный шаблон
+  const cardClone = templateCard.cloneNode(true);
 
-function addTemplateCards() { }
-  const cardElement = templateCard.cloneNode(true);
-  const cardAvatar = cardElement.querySelector(`.popup__avatar`);
+  // Добавляем в DOM, перед блоком с формой-фильтром
+  map.insertBefore(cardClone, mapFiltersContainer);
 
+  const cardDatas = createPinDatas();
+  cardDatas.forEach(function(cardData) {
+    // Находим в DOMe заголовок, адресс, и т.д по списку в задании и подставляем данные.
+    cardClone.querySelector(`.popup__title`).textContent = cardData.offer.title;
+    cardClone.querySelector(`.popup__text--address`).textContent = cardData.offer.address;
+    cardClone.querySelector(`.popup__text--price`).textContent = `${cardData.offer.price}₽/ночь`;
+    cardClone.querySelector(`.popup__type`).textContent = cardData.offer.type;
+    cardClone.querySelector(`.popup__text--capacity`).textContent = `${cardData.offer.rooms} комнаты для ${cardData.offer.guests} гостей`;
+    cardClone.querySelector(`.popup__text--time`).textContent = `Заезд после ${cardData.offer.checkin}, выезд до ${cardData.offer.checkout}`;
+    cardClone.querySelector(`.popup__features`).textContent = cardData.offer.features;
+    cardClone.querySelector(`.popup__description`).textContent = cardData.offer.description;
+    cardClone.querySelector(`.popup__photo`).src = cardData.offer.photos;
 
+    cardClone.querySelector(`.popup__avatar`).src = cardData.author.avatar;
+  });
 
-  map.appendChild(cardElement);
+}
+addTemplateCards();
 
-// addTemplateCards();
