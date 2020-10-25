@@ -149,10 +149,14 @@ function addTemplatePins() {
     const height = parseInt(pinElement.offsetHeight, 10);
     pinElement.style.left = `${pinData.location.x - width / 2}px`;
     pinElement.style.top = `${pinData.location.y - height}px`;
+
+    pinElement.addEventListener(`click`, function() {
+      renderCard(pinData);
+    });
   });
 }
-addTemplatePins();
 
+addTemplatePins();
 
 // Найдем шаблон окна с информацией для копирования
 const templateCard = document.querySelector(`#card`).content.querySelector(`.map__card`);
@@ -161,29 +165,35 @@ const mapFiltersContainer = map.querySelector(`.map__filters-container`);
 
 //эксперименты
 
-function addTemplateCards() {
+function renderCard(pinData) {
+
+  const oldCard = document.querySelector(`.map__card`);
+
+  if (oldCard) {
+    oldCard.remove();
+  }
+
   // Записываем в переменную клонированный шаблон
-  const cardClone = templateCard.cloneNode(true);
+  const card = templateCard.cloneNode(true);
+ 
+  // Находим в DOMe заголовок, адресс, и т.д по списку в задании и подставляем данные.
+  card.querySelector(`.popup__title`).textContent = pinData.offer.title;
+  card.querySelector(`.popup__text--address`).textContent = pinData.offer.address;
+  card.querySelector(`.popup__text--price`).textContent = `${pinData.offer.price}₽/ночь`;
+  card.querySelector(`.popup__type`).textContent = pinData.offer.type;
+  card.querySelector(`.popup__text--capacity`).textContent = `${pinData.offer.rooms} комнаты для ${pinData.offer.guests} гостей`;
+  card.querySelector(`.popup__text--time`).textContent = `Заезд после ${pinData.offer.checkin}, выезд до ${pinData.offer.checkout}`;
+  card.querySelector(`.popup__features`).textContent = pinData.offer.features;
+  card.querySelector(`.popup__description`).textContent = pinData.offer.description;
+  card.querySelector(`.popup__photo`).src = pinData.offer.photos;
+  card.querySelector(`.popup__avatar`).src = pinData.author.avatar;
 
-  // Добавляем в DOM, перед блоком с формой-фильтром
-  map.insertBefore(cardClone, mapFiltersContainer);
-
-  const cardDatas = createPinDatas();
-  cardDatas.forEach(function(cardData) {
-    // Находим в DOMe заголовок, адресс, и т.д по списку в задании и подставляем данные.
-    cardClone.querySelector(`.popup__title`).textContent = cardData.offer.title;
-    cardClone.querySelector(`.popup__text--address`).textContent = cardData.offer.address;
-    cardClone.querySelector(`.popup__text--price`).textContent = `${cardData.offer.price}₽/ночь`;
-    cardClone.querySelector(`.popup__type`).textContent = cardData.offer.type;
-    cardClone.querySelector(`.popup__text--capacity`).textContent = `${cardData.offer.rooms} комнаты для ${cardData.offer.guests} гостей`;
-    cardClone.querySelector(`.popup__text--time`).textContent = `Заезд после ${cardData.offer.checkin}, выезд до ${cardData.offer.checkout}`;
-    cardClone.querySelector(`.popup__features`).textContent = cardData.offer.features;
-    cardClone.querySelector(`.popup__description`).textContent = cardData.offer.description;
-    cardClone.querySelector(`.popup__photo`).src = cardData.offer.photos;
-
-    cardClone.querySelector(`.popup__avatar`).src = cardData.author.avatar;
+  card.addEventListener(`click`, function() {
+    card.remove();
   });
-
+ 
+  // Добавляем в DOM, перед блоком с формой-фильтром
+  map.insertBefore(card, mapFiltersContainer);
 }
-addTemplateCards();
 
+// добавить активность на пин с использование класса map__pin--active
