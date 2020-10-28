@@ -151,6 +151,7 @@ function addTemplatePins() {
     pinElement.style.top = `${pinData.location.y - height}px`;
 
     pinElement.addEventListener(`click`, function() {
+      pinElement.classList.add(`map__pin--active`);
       renderCard(pinData);
     });
   });
@@ -166,7 +167,6 @@ const mapFiltersContainer = map.querySelector(`.map__filters-container`);
 //эксперименты
 
 function renderCard(pinData) {
-
   const oldCard = document.querySelector(`.map__card`);
 
   if (oldCard) {
@@ -175,7 +175,8 @@ function renderCard(pinData) {
 
   // Записываем в переменную клонированный шаблон
   const card = templateCard.cloneNode(true);
- 
+  const cardClose = card.querySelector(`.popup__close`);
+
   // Находим в DOMe заголовок, адресс, и т.д по списку в задании и подставляем данные.
   card.querySelector(`.popup__title`).textContent = pinData.offer.title;
   card.querySelector(`.popup__text--address`).textContent = pinData.offer.address;
@@ -188,12 +189,31 @@ function renderCard(pinData) {
   card.querySelector(`.popup__photo`).src = pinData.offer.photos;
   card.querySelector(`.popup__avatar`).src = pinData.author.avatar;
 
-  card.addEventListener(`click`, function() {
+  function onCardEscPress(pinData) {
     card.remove();
+    document.addEventListener(`keydown`, function(evt) {
+      if (evt.key === `Escape`) {
+        evt.preventDefault();
+        card.remove();
+      }
+    });
+  }
+
+  cardClose.addEventListener(`click`, function() {
+    pinElement.classList.remove(`map__pin--active`);
+    onCardEscPress();
+    document.removeEventListener('keydown', onCardEscPress);
   });
- 
+
+  cardClose.addEventListener(`keydown`, function(evt) {
+    onCardEscPress();
+    document.removeEventListener('keydown', onCardEscPress);
+  });
+
   // Добавляем в DOM, перед блоком с формой-фильтром
   map.insertBefore(card, mapFiltersContainer);
 }
 
 // добавить активность на пин с использование класса map__pin--active
+
+
