@@ -150,8 +150,12 @@ function addTemplatePins() {
     pinElement.style.left = `${pinData.location.x - width / 2}px`;
     pinElement.style.top = `${pinData.location.y - height}px`;
 
-    pinElement.addEventListener(`click`, function() {
+    pinElement.addEventListener(`click`, function () {
+      if (document.pinActive) {
+        document.pinActive.classList.remove(`map__pin--active`);
+      }
       pinElement.classList.add(`map__pin--active`);
+      document.pinActive = pinElement;
       renderCard(pinData);
     });
   });
@@ -164,8 +168,7 @@ const templateCard = document.querySelector(`#card`).content.querySelector(`.map
 // Секцию map нашли выше, в ней находим блок с формой-фильтром, для insertBefore
 const mapFiltersContainer = map.querySelector(`.map__filters-container`);
 
-//эксперименты
-
+// Отрисовка карточки
 function renderCard(pinData) {
   const oldCard = document.querySelector(`.map__card`);
 
@@ -189,9 +192,9 @@ function renderCard(pinData) {
   card.querySelector(`.popup__photo`).src = pinData.offer.photos;
   card.querySelector(`.popup__avatar`).src = pinData.author.avatar;
 
-  function onCardEscPress(pinData) {
+  function onCardEscPress() {
     card.remove();
-    document.addEventListener(`keydown`, function(evt) {
+    document.addEventListener(`keydown`, function (evt) {
       if (evt.key === `Escape`) {
         evt.preventDefault();
         card.remove();
@@ -199,21 +202,17 @@ function renderCard(pinData) {
     });
   }
 
-  cardClose.addEventListener(`click`, function() {
-    pinElement.classList.remove(`map__pin--active`);
+  cardClose.addEventListener(`click`, function () {
+    document.pinActive.classList.remove(`map__pin--active`);
     onCardEscPress();
-    document.removeEventListener('keydown', onCardEscPress);
+    document.removeEventListener(`keydown`, onCardEscPress());
   });
 
-  cardClose.addEventListener(`keydown`, function(evt) {
+  cardClose.addEventListener(`keydown`, function () {
     onCardEscPress();
-    document.removeEventListener('keydown', onCardEscPress);
+    document.removeEventListener(`keydown`, onCardEscPress());
   });
 
   // Добавляем в DOM, перед блоком с формой-фильтром
   map.insertBefore(card, mapFiltersContainer);
 }
-
-// добавить активность на пин с использование класса map__pin--active
-
-
