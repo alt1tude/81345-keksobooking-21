@@ -251,7 +251,7 @@ fieldset {
 }
 
 .map__pin--main:hover ellipse {
-  fill: rgba(255, 86, 53, 0.9);
+  fill: rgba(255, 86, 53, 0.9); 
 }
 
 .map__pin--main::after {
