@@ -126,11 +126,6 @@ function createPinDatas() {
   return arrayFields;
 }
 
-// Блок map, удаляем временно класс для активации карты
-const map = document.querySelector(`.map`);
-map.classList.remove(`map--faded`);
-// function showMap() {}
-
 // Найдем блок(div) в которой будем копировать
 const mapPins = document.querySelector(`.map__pins`);
 // Найдем шаблон метки для копирования
@@ -161,8 +156,7 @@ function addTemplatePins() {
   });
 }
 
-addTemplatePins();
-
+const map = document.querySelector(`.map`);
 // Найдем шаблон окна с информацией для копирования
 const templateCard = document.querySelector(`#card`).content.querySelector(`.map__card`);
 // Секцию map нашли выше, в ней находим блок с формой-фильтром, для insertBefore
@@ -216,3 +210,58 @@ function renderCard(pinData) {
   // Добавляем в DOM, перед блоком с формой-фильтром
   map.insertBefore(card, mapFiltersContainer);
 }
+
+// наработки по 4му заданию
+
+const mapPinMain = mapPins.querySelector(`.map__pin--main`);
+
+// Для блокировки интерактивных эл-в формы-фильтра, нашли выше в секции map
+const mapFilters = mapFiltersContainer.querySelectorAll(`.map__filter`);
+mapFilters.forEach(function (filterElement) {
+  filterElement.setAttribute(`disabled`, `disabled`);
+});
+
+const mapFeatures = mapFiltersContainer.querySelector(`.map__features`);
+mapFeatures.setAttribute(`disabled`, `disabled`);
+
+// Удаление блокировки с фильтров
+function showFilters() {
+  mapFilters.forEach(function (filterElement) {
+    filterElement.removeAttribute(`disabled`);
+  });
+  mapFeatures.removeAttribute(`disabled`);
+}
+
+// Для блокировки формы
+const form = document.querySelector(`.ad-form`);
+const formElements = document.querySelectorAll(`.ad-form__element`);
+formElements.forEach(function (formElement) {
+  formElement.setAttribute(`disabled`, `disabled`);
+});
+
+// Удаление блокировки с формы объявления
+function showFormMain() {
+  formElements.forEach(function (formElement) {
+    formElement.removeAttribute(`disabled`);
+  });
+}
+
+function showMap() {
+  map.classList.remove(`map--faded`);
+  form.classList.remove(`ad-form--disabled`);
+}
+
+mapPinMain.addEventListener(`mousedown`, function () {
+  showFilters();
+  showFormMain();
+  showMap();
+});
+
+// const pinMainWidth = mapPinMain.offsetWidth;
+// const pinMainHeight = mapPinMain.offsetHeight;
+const pinMainX = parseInt(mapPinMain.style.left, 10);
+const pinMainY = parseInt(mapPinMain.style.top, 10);
+const pinMainCoordX = `${Math.round(pinMainX + mapPinMain.offsetWidth / 2)}`;
+const pinMainCoordY = `${Math.round(pinMainY - mapPinMain.offsetWidth)}`;
+const formAddress = form.querySelector(`#address`);
+formAddress.value = `${pinMainCoordX}, ${pinMainCoordY}`;
